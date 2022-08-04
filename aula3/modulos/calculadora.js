@@ -5,10 +5,8 @@
 * Versão : 1.0
 ***********************************************/
 
-
-
-// Metopo traicional de se criar uma função
-function calcular (valor1, valor2, opcaoCalc){
+// Metopo tradicional de se criar uma função
+const calcular = function (valor1, valor2, opcaoCalc){
     let numero1 = valor1
     let numero2 = valor2
     let escolhaOp = opcaoCalc
@@ -17,40 +15,54 @@ function calcular (valor1, valor2, opcaoCalc){
       console.log('ERRO : Nenhum número foi digitado, por favor reinicie o programa')
       exit;
      
-    } else{
+    } 
+    else{
       if(escolhaOp == 1){
-        const soma =  numero1 + numero2
-        let resultado = parseFloat(soma)
-        console.log('O resultao a soma foi de : ' + resultado)
+        resultado = somar(numero1,numero2)  
+        console.log('O resultado a soma foi de : ' + resultado)
+        
       }
       else if (escolhaOp == 2){
-        const sub = numero1 - numero2
-         let resultado = parseFloat(sub)
+        resultado = sub(numero1,numero2)
          console.log('O resultado da subtração foi de : ' + resultado)
-    }
+        
+        }
       else if(escolhaOp == 3){
-        const multi =  numero1 * numero2
-        let resultado = parseFloat(multi)
+        resultado = multiplicar(numero1,numero2)
         console.log('o resultado da multiplicação foi de : ' + resultado)
-    }
+        
+      }
       else if(escolhaOp == 4){
         if (numero1 > numero2) {
-          const div = numero2 / numero1
-          let resultado = parseFloat(div)
+          resultado = dividir(numero1,numero2)
            console.log('O resultado da divisão foi de : ' + resultado)
-        }
-          var divIntertido = numero1 / numero2
-          let resultado = parseFloat(divIntertido) 
+           
+          }
+         resultado = outraDividir(numero1,numero2)
          console.log('O resultado da divisão foi de : ' + resultado)
-    }
+         
+        }
       else {
         console.log('ERRO : nenhuma opção foi selecionada, por favor reinicie o programa')
-        entradaDados.close()
-    }
-    entradaDados.close()
-  
-  
-  }
+       
+      }
     
-  }
-  
+    }
+    
+}
+ // Modelo de função Arrow Function
+const somar = (numero1,numero2) => parseFloat (numero1) + parseFloat(numero2)
+
+const sub = (numero1, numero2) => parseFloat(numero1) - parseFloat(numero2)
+
+const multiplicar = (numero1, numero2) => parseFloat(numero1) * parseFloat(numero2)
+
+const dividir = (numero1, numero2) => parseFloat(numero1) / parseFloat (numero2)
+
+const outraDividir = (numero1, numero2) => parseFloat(numero2) / parseFloat(numero1)
+
+ 
+//  as funções que serão imoportdas em outros projetos, precisam OBBRIGATORIAMENTE serem incluías no module.exports, as funções que não forem incluías no module.exports, ela irá funcionar apenas localmente neste arquivo
+module.exports = {
+     calcular
+}
