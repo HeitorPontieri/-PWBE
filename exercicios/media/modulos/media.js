@@ -1,3 +1,11 @@
+
+/******************************************** 
+* Objetivo : Calcular a média e retornar o status do aluno
+* Autor : HeitorPontieri
+* Data de Criação : 11/08/2022
+* Versão : 1.0
+***********************************************/
+
 'use strict'
 
 
