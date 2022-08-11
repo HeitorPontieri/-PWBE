@@ -1,28 +1,41 @@
 'use strict'
 
 
-const calcMedia = function mediaF(nota1, nota2, nota3, nota4,notaEx) {
-    let media
+const calcMedia = function mediaF(nota1, nota2, nota3, nota4,) {
+    let media = ''
     media = (parseFloat(nota1) + parseFloat(nota2) + parseFloat(nota3) + parseFloat(nota4)) / 4
+    return media
+}
+
+const exame = function mediaE (notaEx,media){
+    let mediaEx = ''
     
-    if (media < 60) {
-        let mediaEx = (media + notaEx) / 2
-    }
+    mediaEx = (media + notaEx) / 2
+    return mediaEx
 
 }
 
-const Result = function result ( media, mediaEx){
+const result = function result (media,mediaEx){
     if(media>70){
         return  'aprovado'
     }
     else if(69<media>50){
         return 'exame'
     }
+    else if(mediaEx<60){
+        return 'reprovado pelo exame'
+    }
+    else if(mediaEx>60){
+        return 'aprovado pelo exame'
+    }
+    
+    
+    
     else{
         return  'reprovado'
     }
 }
 
 module.exports = {
-    calcMedia,Result
+    calcMedia,result,exame
 }

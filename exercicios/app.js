@@ -11,7 +11,8 @@ console.log('###### Cálculo de Média Online #######')
 const { exit } = require('process')
 const readline = require('readline')
 const { calcMedia } = require('./modulos/media.js')
-const { media, mediaEx,Result } = require('./modulos/media.js')
+const { result } = require('./modulos/media.js')
+const { exame } = require('./modulos/media')
 const entradaDados = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -23,20 +24,20 @@ entradaDados.question('Digite o nome do aluno(a)\n', function (alunoNome) {
         let nomeProf = profNome
         entradaDados.question('Qual o sexo do aluno(a)[masculino/feminino]\n', function (sexoAluno) {
             let alunoSexo = sexoAluno
-            if (alunoSexo.toUpperCase() == 'MASCULINO') {
-                alunoSexo = ' o aluno'
+            if (alunoSexo.toUpperCase() == 'MASCULINO' || alunoSexo.toUpperCase() == 'MASC') {
+                alunoSexo = 'o aluno'
             }
-            else if (alunoSexo.toUpperCase() == 'FEMININO') {
+            else if (alunoSexo.toUpperCase() == 'FEMININO' || alunoSexo.toUpperCase() == 'MASC') {
                 alunoSexo = 'a aluna'
             }
 
             entradaDados.question('Qual o sexo do professor(a) [masculino/feminino]\n', function (sexoProfessor) {
                 let profSexo = sexoProfessor
-                if (profSexo.toUpperCase() == 'MASCULINO') {
+                if (profSexo.toUpperCase() == 'MASCULINO' || profSexo.toUpperCase() == 'MASC') {
                     profSexo = 'O professor'
                 }
-                else if (profSexo.toUpperCase() == 'FEMININO') {
-                    profSexo = ' A professora'
+                else if (profSexo.toUpperCase() == 'FEMININO' || profSexo.toUpperCase() == 'FEM') {
+                    profSexo = 'A professora'
                 }
 
                 entradaDados.question('Qual o nome do curso\n', function (cursoNome) {
@@ -51,39 +52,54 @@ entradaDados.question('Digite o nome do aluno(a)\n', function (alunoNome) {
                                     let nota3 = valor3
                                     entradaDados.question('Digite uma nota :\n', function (valor4) {
                                         let nota4 = valor4
-                                        
-                                        entradaDados.question('Caso ' + alunoSexo + nomeAluno + ' tenha ficado de exame, qual foi sua nota\n', function (exNota) {
-                                            let notaEx = exNota
 
-                                            if (nota1 == '' || nota2 == '' || nota3 == '' || nota4 == '') {
-                                                console.log('Espaço em branco, por favor reinsira as notas')
-                                                entradaDados.close()
+
+                                        if (nota1 == '' || nota2 == '' || nota3 == '' || nota4 == '') {
+                                            console.log('Espaço em branco, por favor reinsira as notas')
+                                            entradaDados.close()
+                                            exit()
+                                        }
+
+                                        if (nota1 > 100 || nota2 > 100 || nota3 > 100 || nota4 > 100) {
+                                            console.log('Notas inválidas, por favor reinsira as notas')
+                                            entradaDados.close()
+                                            exit()
+                                        }
+
+
+                                        let notaEx = ''
+                                        let media = calcMedia(nota1, nota2, nota3, nota4)
+                                        let mediaEx = exame(notaEx)
+
+
+
+                                        result(media)
+
+
+                                        entradaDados.question('Qual foi a nota de exame d' + alunoSexo + nomeAluno + '\n', function (exNota) {
+                                            notaEx = parseFloat(exNota)
+                                            if (notaEx > 0) {
+                                                console.log('########## Relátorio das Notas ##########')
+                                                console.log(alunoSexo + ' ' + alunoNome + ' foi ' + result(media) + ' na disciplina ' + nomeMateria)
+                                                console.log('Curso : ' + nomeCurso)
+                                                console.log(profSexo + ': ' + profNome)
+                                                console.log('As nota d' + alunoSexo + ' ' + alunoNome + ' foram : ' + nota1 + ' ' + nota2 + ' ' + nota3 + ' ' + nota4)
+                                                console.log('A média final d' + alunoSexo + ' ' + alunoNome + ' foi ' + media)
+                                                console.log('A média final d' + alunoSexo + ' ' + alunoNome + ' contando com com o exame foi ' + mediaEx)
+
                                                 exit()
                                             }
-
-                                            if (nota1 > 100 || nota2 > 100 || nota3 > 100 || nota4 > 100) {
-                                                console.log('Notas inválidas, por favor reinsira as notas')
-                                                entradaDados.close()
+                                            else {
+                                                console.log('########## Relátorio das Notas ##########')
+                                                console.log(alunoSexo + ' ' + alunoNome + ' foi ' + result(media) + ' na disciplina ' + nomeMateria)
+                                                console.log('Curso : ' + nomeCurso)
+                                                console.log(profSexo + ':' + profNome)
+                                                console.log('As nota d' + alunoSexo + ' ' + alunoNome + ' foram : ' + nota1 + ' ' + nota2 + ' ' + nota3 + ' ' + nota4)
+                                                console.log('A média final d' + alunoSexo + ' ' + alunoNome + ' foi ' + media)
                                                 exit()
                                             }
-                                            
-                                            calcMedia(nota1, nota2, nota3, nota4, notaEx)
-                                            Result(media)
-                                             
-                                            console.log('########## Relátorio das Notas ##########')
-                                            console.log(alunoSexo + alunoNome + 'foi' + Result(media) + ' na disciplina'+ nomeMateria)
-                                            console.log('Curso : ' + nomeCurso)
-                                            console.log(profSexo + profNome)
-                                            console.log('As notas' + alunoSexo + alunoNome +'foram : ' + nota1 + '' + nota2 + '' + nota3 + '' + nota4)
-                                            console.log('A média final d'+alunoSexo + alunoNome + 'foi'+ media)
-                                            console.log('A média final d'+alunoSexo + alunoNome + 'contando com com o exame foi' + mediaEx )
-
-                                        
-
-
-                
-
                                         })
+
                                     })
                                 })
 
