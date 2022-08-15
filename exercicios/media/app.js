@@ -10,9 +10,9 @@
 console.log('###### Cálculo de Média Online #######')
 const { exit } = require('process')
 const readline = require('readline')
-const { calcMedia } = require('./media.js')
-const { result } = require('./media.js')
-const { exame } = require('./media')
+const { calcMedia } = require('./modulos/media.js')
+const { result } = require('./modulos/media.js')
+const { exame } = require('./modulos/media')
 const entradaDados = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -70,6 +70,7 @@ entradaDados.question('Digite o nome do aluno(a)\n', function (alunoNome) {
                                         let notaEx = ''
                                         let media = calcMedia(nota1, nota2, nota3, nota4)
                                         let mediaEx = exame(notaEx)
+                                        
 
 
 

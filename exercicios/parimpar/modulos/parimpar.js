@@ -6,25 +6,75 @@
 ***********************************************/
 'use strict'
 
-const { exit } = require("process")
+const { exit } = require("process");
 
-const parimpar = function(valor1, valor2){   
-    
-    let valorinicial = valor1
-    let valorfinal = valor2
-    
-    for (let i = valorinicial; i <= valorfinal; i++) {
-        if(i % 2 == 0){
-            console.log(i)
-            exit()
+
+const parimpar = function (valorinicial, valorfinal, decisao) {
+
+    let i;
+    let p;
+    let qnt;
+
+
+    if (decisao.toUpperCase() == 'PARES') {
+        qnt = 0
+        console.log('\nLista de números pares \n')
+        for (p = valorinicial; p <= valorfinal; p++) {
+            if (p % 2 == 0) {
+                console.log(p)
+                qnt += 1
+            }
+
         }
-       if (i % 2 != 0){
-            console.log(i)
-            exit()
-        }    
-    } 
+        console.log('\nQuantidade de números pares  = ' + qnt)
+        exit()
+
+    }
+    else if (decisao.toUpperCase() == 'ÍMPARES' || decisao.toUpperCase() == 'IMPARES') {
+        qnt = 0
+        console.log('\nLista de números ímpares \n')
+        for (i = valorinicial; i <= valorfinal; i++) {
+            if (i % 2 != 0) {
+                console.log(i)
+                qnt += 1
+            }
+        }
+        console.log('Quantidade de números impares  = ' + qnt)
+        exit()
+    }
+    else if (decisao.toUpperCase() == 'AMBOS') {
+        qnt = 0
+        console.log('\nLista de números pares \n')
+        for (p = valorinicial; p <= valorfinal; p++) {
+            if (p % 2 == 0) {
+                console.log(p)
+                qnt += 1
+            }
+
+        }
+        console.log('\nQuantidade de números pares  = ' + qnt)
+
+
+        console.log('\nLista de números ímpares \n')
+        qnt = 0
+        for (i = valorinicial; i <= valorfinal; i++) {
+            if (i % 2 != 0) {
+                console.log(i)
+                qnt += 1
+            }
+
+
+        }
+        console.log('\nQuantidade de números impares  = ' + qnt)
+        exit()
+    }
+
+    else {
+        console.log('\nERRO : Nada foi digitado ')
+        exit()
+    }
 }
 
-module.exports={
+module.exports = {
     parimpar
 }
