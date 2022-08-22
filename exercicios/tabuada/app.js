@@ -2,8 +2,8 @@
 /******************************************** 
 * Objetivo : Calcular a média e retornar o status do aluno
 * Autor : HeitorPontieri
-* Data de Criação : 11/08/2022
-* Versão : 1.0
+* Data de Criação : 22/08/2022
+* Versão : 1.0.1
 ***********************************************/
 
 'use strict'
@@ -24,7 +24,7 @@ entradaDados.question('Digite um número para ser multiplicado, entre 2 e 100\n'
         entradaDados.question('Digite um número para ser o multiplicador dos dois últimos\n', function(multipli){
             let multiplicador = parseFloat(multipli)
 
-            if (num1 < 2 || num2 < 2|| num1 > 100 || num2) {
+            if (num1 < 2 || num2 < 2|| num1 > 100 || num2 > 100) {
                 console.log('ERRO : números inválidos')
                 exit()
             }
