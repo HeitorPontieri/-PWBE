@@ -33,6 +33,8 @@ const listaContatos = [{
 
 
 console.log(listaContatos)
+
+// Modo de chamar uma chave do JSON    
 console.log('Nome do contato : ' + listaContatos.nome)
 console.log('O email cadastrado : ' + listaContatos.email)
 
