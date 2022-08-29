@@ -1,7 +1,7 @@
 /******************************************** 
-* Objetivo : CGerenciador de númeres ímpares e pares
+* Objetivo : Arquivo para interação com o usuário e exibição na tela
 * Autor : HeitorPontieri
-* Data de Criação : 11/08/2022
+* Data de Criação : 25/08/2022
 * Versão : 1.0
 ***********************************************/
 
@@ -24,8 +24,8 @@ entradaDados.question('Digite o valor inicial da separação\n', function (valor
         let valorfinal = parseFloat(valor2)
 
         let pAr = par(valorinicial, valorfinal)
-       let imPar = impar(valorinicial, valorfinal)
-        let imparPar = imparpar(imPar,pAr)
+        let imPar = impar(valorinicial, valorfinal)
+        let imparPar = imparpar(imPar, pAr)
 
         console.log(imparPar)
     })
