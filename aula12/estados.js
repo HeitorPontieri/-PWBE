@@ -66,37 +66,25 @@ const getListaEstados = function () {
 
 }
 
-const getEstado = function (siglaEstados) {
-    let sigla = siglaEstados.toUpperCase()
-    // Cria um objeto JSON
-    let estadoNome = {}
+const getEstado = function(siglaEstados){
+    let sigla = siglaEstados
+    let estadoNome  = {}    
     let erro = true
 
-    if (typeof (sigla) != 'undefined') {
-        if (sigla != '' && sigla.length == 2) {
-
-
-            estados.forEach(item => {
-                // Localiza  um item no array (indexOf())
-                if (item.sigla.indexOf(sigla) == 0) {
-
-                    // Criam as chaves uf e descricao para enviar ao JSON
-                    estadoNome.uf = item.sigla
-                    estadoNome.descricao = item.nome
-                    erro = false
-                }
-            })
-            if (erro) {
-                return false
-            }
-            else {
-                return estadoNome
-            }
-
+    estados.forEach(item =>{
+        if(item.sigla.indexOf(sigla)== 0){
+            estadoNome.uf = item.sigla
+            estadoNome.descricao = item.nome
+            erro = false 
         }
-    }
-}
-// Printa uma tabela
-// console.table(getListaEstados())
 
-console.table(getEstado(''))
+        if(erro){
+            return false
+        }
+        else{
+            return estadoNome
+        }
+    })
+}
+
+console.table(getEstados())
