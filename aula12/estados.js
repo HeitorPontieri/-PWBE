@@ -87,4 +87,4 @@ const getEstado = function(siglaEstados){
     })
 }
 
-console.table(getEstados())
+console.table(getEstado())

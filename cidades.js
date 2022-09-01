@@ -1,5 +1,4 @@
-
-var cities = [
+var cidades = [
     {
         "sigla": "AC",
         "nome": "Acre",
@@ -22423,45 +22422,35 @@ var cities = [
         ]
     }
 ]
-const getCidades = function () {
 
-    const nomeCidade = []
-    erro = true
 
-    cidades.forEach(item => {
-        nomeCidade.push(item[1].nome)
-        erro = false
-
-    })
-    if (erro) {
-        return false
-    }
-    else {
-        return getCidades
-    }
-}
-
-const getCities = function (nomeEstado) {
-
-    let estado = nomeEstado
-    let cidadesNome = []
+const getCidades = function(estado){
+    let nome = estado
+    let cities = []
     let erro = true
-
-    if(typeof(estado) != undefined){
-        if(estado != ''){
-            cities.forEach(item =>{
-                if(item.cidades.indexOf(estado)== 0){
-                   for(let i= 0 ; i<item.cidades.length; i++){
-                    cidades.push(item.cidade[i].nome)
-                    erro = false
-                   }
-                    
-
-
+    
+    if(typeof(nome) != undefined){
+        if(nome != ''){
+            cidades.forEach(item => {
+                if(item.nome.indexOf(nome)== 0){
+                    item.cidades.forEach(i=>{
+                        cities.push(i.nome)
+                        erro = false
+                    })
                 }
             })
-            return cidadesNome
         }
+
+    if(erro){
+        return false
+    }
+    else{
+        return cities
+    }
     }
 }
-console.log(getCities('SP'))
+
+console.log(getCidades('São Paulo'))
+
+
+
