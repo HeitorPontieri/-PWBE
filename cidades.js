@@ -22423,21 +22423,25 @@ var cidades = [
     }
 ]
 
-
+// Retorna a lista de cidades pelo estado
 const getCidades = function(estado){
-    let nome = estado
+    let sigla  = estado
     let cities = []
     let erro = true
     
-    if(typeof(nome) != undefined){
-        if(nome != ''){
+    if(typeof(sigla) != undefined){
+        //Tratamento para validação de sigla vazia e com diferenca de caracteres
+        if(sigla != '' && sigla .length == 2){
+            // Percorre o array de cidades para validar a sigla do 
             cidades.forEach(item => {
-                if(item.nome.indexOf(nome)== 0){
+                // Localiza a sigla do estado dentro do array de cidades
+                if(item.sigla.indexOf(sigla.toUpperCase())== 0){
+                    // Percorre o array da chave de cidades dentro do estado que foi encontrado
                     item.cidades.forEach(i=>{
                         cities.push(i.nome)
                         erro = false
                     })
-                }
+                }   
             })
         }
 
@@ -22450,7 +22454,7 @@ const getCidades = function(estado){
     }
 }
 
-console.log(getCidades('São Paulo'))
+console.table(getCidades('pa'))
 
 
 
