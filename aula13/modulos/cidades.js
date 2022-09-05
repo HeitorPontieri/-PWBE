@@ -22454,7 +22454,9 @@ const getCidades = function(estado){
     }
 }
 
-console.table(getCidades('pa'))
+module.exports = {
+    getCidades
+}
 
 
 

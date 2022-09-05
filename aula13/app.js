@@ -35,6 +35,8 @@ const { getListaEstados } = require('./modulos/estados')
 
 const { getEstado } = require('./modulos/estados')
 
+const {getCidades} = require('./modulos/cidades')
+
 // Cria um objeto criado app que será especialista nas funções do express
 const app = express()
 
@@ -98,13 +100,22 @@ app.get('/estado/:sigla', cors(), async function(request,response,next){
                 response.json('{message : Nenhum item encontrado}')
         }
 })
-app.get('/cidades', cors(), async function (request, response, next) {
+
+app.get('/cidades:sigla/:cidades', cors(), async function (request, response, next) {
 
         
-        let message = { mensagem: 'Bem-vindo a API das cidades' }
+        let sigla = request.params.sigla
+       
+        let cidades = getCidades(sigla)
 
-        response.status(200)
-        response.json(message)
+        if(cidades){
+                response.status(200)
+                response.json(cidades)
+        }    
+        else{
+                response.status(404)
+                response.json('{message : Nenhum item encontrado}')
+        }   
 })
 
 // Para que os endpoints possam estar funcionando, precisamos obrigatoriamente finalizar a API essa function, que represemta o start da API
