@@ -36,5 +36,42 @@ const app = express()
 // request - recebe dados
 // response - devolve dados
 app.use((request, response, next) => {
-    response.header('Access - Control - Allow -- Origin','*')
+        
+        // Permite especificar quem serão os IPs que podem acessar a API
+                // * = todos 
+        response.header('Access-Control-Allow-Origin','*')
+        
+        // Permite especificar quais serão os verbos(métodos) que a API irá reconhecer
+        response.header('Access-Control-Allow-Methods','GET, PUT, POST, DELETE , OPTIONS')
+
+        // Estabelece que as permissões acima serão representadas pelo cors
+        app.use(cors())
+
+        next()
 })
+
+// EndPoints
+        // São 'ouvidos' colocados dentro da API, esperando uma palavra ser requisitada para fazer algo
+
+app.get('/estados', cors(), async function(request,response){
+
+        let message = {mensagem : 'Bem-vindo a API dos estados'}
+        
+        
+        response.status(200)
+        response.json(message)
+})
+app.get('/cidades', cors(), async function(request,response){
+
+        let message = {mensagem : 'Bem-vindo a API das cidades'}
+        
+        
+        response.status(200)
+        response.json(message)
+})
+
+// Para que os endpoints possam estar funcionando, precisamos obrigatoriamente finalizar a API essa function, que represemta o start da API
+app.listen(8080, function(){
+        console.log(' Servidor aguardando requisições')
+})
+
