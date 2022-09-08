@@ -101,14 +101,16 @@ app.get('/estado/:sigla', cors(), async function(request,response,next){
         }
 })
 
-app.get('/cidades:sigla/:cidades', cors(), async function (request, response, next) {
+app.get('/cidades/:sigla', cors(), async function (request, response, next) {
 
         
         let sigla = request.params.sigla
        
         let cidades = getCidades(sigla)
+        let cidadesJSON = {}
 
         if(cidades){
+                cidadesJSON.cidades = cidades
                 response.status(200)
                 response.json(cidades)
         }    
