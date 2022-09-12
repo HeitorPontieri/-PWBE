@@ -22,9 +22,9 @@ app.use((request,response, next) => {
 app.get('/livros/:book', cors(), async function(request, response, next){
 
     let chave = request.params.book
-
     let liv = getLivros(chave)
     let livJSON = {}
+
 
     if(liv){
         livJSON.liv = liv

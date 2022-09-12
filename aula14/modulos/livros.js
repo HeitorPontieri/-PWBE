@@ -2352,35 +2352,33 @@ var livros = [
     }
 ]
 
-const getLivros = function Livros(chave) {
-    let erro = 0
-    const pesquisa = []
+const getLivros = function (chave) {
+    let erro = true
+    let pesquisa = []
     let json = {}
     let chaveWord = chave
  
     livros.forEach(item => {
         item.books.forEach(i => {
-            if (i.title.indexOf(chaveWord)) {
-                pesquisa.push(i.title)
-                pesquisa.push(i.subtitle)
-                pesquisa.push(i.price)
-                pesquisa.push(i.image)
+            if (i.title.indexOf(chaveWord) > -1) {
+                pesquisa.push({titulo : i.title, descrição : i.subtitle, preço : i.price, imagem : i.image})
+                erro = false
             }
         })
-        json.total = pesquisa.length
-        json.livros = pesquisa
-
-        if(erro){
-            return false
-        }
-        else{
-            return json
-        }
+        
         
     })
+    json.total = pesquisa.length
+    json.livros = pesquisa
+    
+    if(erro){
+        return false
+    }
+    else
+       return json
 }
 
-getLivros('SQL')
+console.log(getLivros('SQL'))
 
 module.exports = {
    getLivros
