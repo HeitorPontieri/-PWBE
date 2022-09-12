@@ -22445,12 +22445,12 @@ const getCidades = function(estado){
             })
         }
 
-    if(erro){
-        return false
-    }
-    else{
-        return cities
-    }
+        if(erro){
+            return false
+        }
+        else{
+            return cities
+        }
     }
 }
 

@@ -85,7 +85,7 @@ app.get('/estados', cors(), async function (request, response, next) {
 })
 app.get('/estado/:sigla', cors(), async function(request,response,next){
        
-        // Recebe a sigla enviada por parametro no endpoint
+        // Recebe a sigla enviada porl parametro no endpoint
         let sigla = request.params.sigla
 
         // Chama a funcao que vai localizar o estado solicitado
@@ -100,7 +100,7 @@ app.get('/estado/:sigla', cors(), async function(request,response,next){
                 response.json('{message : Nenhum item encontrado}')
         }
 })
-
+// Endpoint : Listagem de cidades
 app.get('/cidades/:sigla', cors(), async function (request, response, next) {
 
         
