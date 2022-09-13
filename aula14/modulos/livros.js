@@ -2360,7 +2360,7 @@ const getLivros = function (chave) {
     let json = {}
     // Palavra chave que o usuário irá digitar para os livros aparecerem
     let chaveWord = chave.toLowerCase()
- 
+
     // Percorre o array livros
     livros.forEach(item => {
         // Percorre o elemento books dentro de livros
@@ -2368,30 +2368,30 @@ const getLivros = function (chave) {
             // Localiza a palavra chave dentro do titulo do livro (usando o indexOf)
             /*
                 .includes = faz a mesma coisa que o indexOf, mas retorna true ou false 
-            */  
-           
-           
-            if(i.title.toLowerCase().indexOf(chaveWord) > -1) {
+            */
+
+
+            if (i.title.toLowerCase().indexOf(chaveWord) > -1) {
                 // Adiciona no array, um JSON com todos os elementos solicitados
-                pesquisa.push({titulo : i.title, descrição : i.subtitle, preço : i.price, imagem : i.image})
+                pesquisa.push({ titulo: i.title, descrição: i.subtitle, preço: i.price, imagem: i.image })
                 erro = false
             }
         })
-        
-        
+
+
     })
     // Contador de itens
     json.total = pesquisa.length
     json.livros = pesquisa
-    
-    if(erro){
+
+    if (erro) {
         return false
     }
     else
-       return json
+        return json
 }
 
 
 module.exports = {
-   getLivros
+    getLivros
 }
