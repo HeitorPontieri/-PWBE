@@ -9,3 +9,13 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+// Para realizar o primerio acesso ao BD é importante criar uma model
+// e verificar se essa model é criada no Banco de Dados.
+// isso precisa ser feito pelo menos a primeira vez para saber se o prisma está com acesso ao BD
+   // npx primsa migrate dev
+
+// model tbl_teste{
+//   id Int @id @default(autoincrement())
+//   nome String
+// }

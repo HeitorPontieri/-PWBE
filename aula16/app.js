@@ -9,3 +9,15 @@
         // npx prisma
         // npx init prisma
         // npm install @prisma/client
+        
+        
+// Modelo de Trabalho 
+    // MVC
+//      ||> Model -> Manipula dados com o BD
+//      ||> View -> Dados de manipulação do usuário (front-end)
+//      ||> Controller -> Recebe, trata, busca dados (back-end)
+
+/*
+        View (HTML,CSS, JS) --> API --> Controller (Node.js) --> Model(Insert, Select, Update e Delete) --> Banco de Dados
+
+*/
