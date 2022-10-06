@@ -24,6 +24,15 @@ const excluirAluno = async function  (id) {
 // Função para retornar todos os registros
 const listarAlunos = async function  () {
 
-    const selectAlunos = selectAllAlunos()
+    const selectAlunos =  await selectAllAlunos()
+    
+    if(selectAlunos){
+        return selectAlunos
+    }
+    else{
+        return false
+    }
 
 }
+
+console.log(listarAlunos())
