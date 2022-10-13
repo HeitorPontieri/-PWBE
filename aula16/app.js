@@ -90,24 +90,38 @@ app.post('/aluno', cors(),jsonParser,async function(request, response){
     // Content-Type é a variável que traz o formato de dados da requisição
     let headerContentType
 
+    // Recebe o tipo de content type que foi enviado no header da requisição 
     headerContentType = request.headers['content-type']
 
+    // Valida o tipo do content type é do tipo application/json
     if(headerContentType == 'application/json'){
+        // Recebe do corpo da mensagem o conteúdo,
         let dadosBody = request.body
         
-        if(dadosBody == undefined){
-             statusCode = 200
-            message ='Sucesso'
+        // Realiza um processo de conversão de dados para conseguir comparar o json vazio
+        if(JSON.stringify(dadosBody) != '{}'){
+            // Import do arquivo da controller
+            const controllerAluno = require('./controller/controllerAluno.js')
+            // Chama a funcao novoAluno da controller e encaminha os dados do body
+            const novoAluno = await controllerAluno.novoAluno(dadosBody)
+            
+            if(novoAluno){
+                statusCode = 201
+                message ='Item criado com sucesso'
+            }
+            else{
+                statusCode = 400
+                message = 'O item não pode ser criado'
+            }
         }
         else{
-            statusCode = 400
-            message = ' Este tipo de requisição precisa de conteúdo no body '
+            statusCode = 204
+            message = 'Este tipo de requisição precisa de conteúdo no body'
         }
-       
     }
     else{
         statusCode = 415
-        message = ' Tipo de mídia não suportado. Esta requisição aceita apenas (application/json) '
+        message = ' Tipo de mídia não suportado. Esta requisição aceita apenas JSON(application/json) '
     }
     response.status(statusCode)
     response.json(message)
@@ -116,4 +130,4 @@ app.post('/aluno', cors(),jsonParser,async function(request, response){
 // Ativa o servidor para receber requisições HTTP   
 app.listen(8080, function(){
     console.log('Servidor aguardando requisições')
-})
+}) 
