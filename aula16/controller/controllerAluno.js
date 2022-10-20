@@ -37,6 +37,12 @@ const novoAluno = async function (aluno) {
 }
 // Função para atualizar um registro
 const atualizarAluno = async function (aluno) {
+    
+    // Validação para o ID como campo obrigatório
+    if(aluno.id == '' || aluno.id == undefined){
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+    }
+    
     // Validação de campos obrigatórios 
     if (aluno.nome == '' ||aluno.nome == undefined ||aluno.foto == undefined || aluno.foto == '' || aluno.rg == ''||aluno.rg == undefined ||  aluno.cpf == '' || aluno.cpf == undefined || aluno.email == ''|| aluno.email == undefined || aluno.data_nascimento == ''|| aluno.data_nascimento == undefined ) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
@@ -46,7 +52,7 @@ const atualizarAluno = async function (aluno) {
         return{status : 400, message :MESSAGE_ERROR.INVALID_EMAIL} 
     }
     else {
-        // Chama a função para atualizar um novo aluno
+        // Chama a função para atualizar um aluno
         const atualizarAluno = require('../model/DAO/aluno.js')
         const result = await atualizarAluno.updateAluno(aluno)
 

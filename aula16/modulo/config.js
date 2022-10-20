@@ -14,7 +14,8 @@ Versão : 1.0
     CONTENT_TYPE : 'O cabeçalho da requisição não possui content-type válido!',
     EMPTY_BODY : 'O body da requisição não pode estar vazio!',
     NOT_FOUND_DB : 'Não foram encontrados registros no Banco de Dados',
-   INTERNAL_ERROR_DB : 'Não foi possível realizar a operação com o Banco de Dados '
+   INTERNAL_ERROR_DB : 'Não foi possível realizar a operação com o Banco de Dados',
+   REQUIRED_ID : 'O Id do registro é obrigatório neste tipo de requisição'
 
 }
 const MESSAGE_SUCESS ={
