@@ -13,7 +13,9 @@ Versão : 1.0
     INVALID_EMAIL : 'O email informado não é válido!',
     CONTENT_TYPE : 'O cabeçalho da requisição não possui content-type válido!',
     EMPTY_BODY : 'O body da requisição não pode estar vazio!',
-    NOT_FOUND_DB : 'Não foram encontrados registros no Banco de Dados'
+    NOT_FOUND_DB : 'Não foram encontrados registros no Banco de Dados',
+   INTERNAL_ERROR_DB : 'Não foi possível realizar a operação com o Banco de Dados '
+
 }
 const MESSAGE_SUCESS ={
     INSERT_ITEM : 'Item criado com sucesso no Banco de Dados',

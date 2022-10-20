@@ -39,6 +39,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const { json } = require('body-parser')
 
+// Arquivo de mensagens padronizadas 
+const {MESSAGE_ERROR, MESSAGE_SUCESS} = require('./modulo/config.js')
+
 const app = express()
 
 // Configuração de cors para liberar o acesso a API 
@@ -75,7 +78,7 @@ app.get('/alunos',cors(), async function(request,response){
     else{
         // Status 400
         statusCode = 400
-        message = 'Nenhum aluno encontrado'
+        message = MESSAGE_ERROR.NOT_FOUND_DB
     }     
     // Retorna os dados da API
     response.status(statusCode)
@@ -104,28 +107,59 @@ app.post('/aluno', cors(),jsonParser,async function(request, response){
             const controllerAluno = require('./controller/controllerAluno.js')
             // Chama a funcao novoAluno da controller e encaminha os dados do body
             const novoAluno = await controllerAluno.novoAluno(dadosBody)
-            
-            if(novoAluno){
-                statusCode = 201
-                message ='Item criado com sucesso'
-            }
-            else{
-                statusCode = 400
-                message = 'O item não pode ser criado'
-            }
+            statusCode = novoAluno.status
+            message = novoAluno.message
         }
         else{
-            statusCode = 204
-            message = 'Este tipo de requisição precisa de conteúdo no body'
+            statusCode = 400
+            message = MESSAGE_ERROR.EMPTY_BODY
         }
     }
     else{
         statusCode = 415
-        message = ' Tipo de mídia não suportado. Esta requisição aceita apenas JSON(application/json) '
+        message = MESSAGE_ERROR.CONTENT_TYPE
     }
     response.status(statusCode)
     response.json(message)
 })
+
+app.put('/atualizar/aluno', cors(),jsonParser,async function(request, response){
+    let statusCode
+    let message
+    
+    // Content-Type é a variável que traz o formato de dados da requisição
+    let headerContentType
+
+    // Recebe o tipo de content type que foi enviado no header da requisição 
+    headerContentType = request.headers['content-type']
+
+    // Valida o tipo do content type é do tipo application/json
+    if(headerContentType == 'application/json'){
+        // Recebe do corpo da mensagem o conteúdo,
+        let dadosBody = request.body
+        
+        // Realiza um processo de conversão de dados para conseguir comparar o json vazio
+        if(JSON.stringify(dadosBody) != '{}'){
+            // Import do arquivo da controller
+            const controllerAluno = require('./controller/controllerAluno.js')
+            // Chama a funcao novoAluno da controller e encaminha os dados do body
+            const atualizarAluno = await controllerAluno.atualizarAluno(dadosBody)
+            statusCode = atualizarAluno.status
+            message = atualizarAluno.message
+        }
+        else{
+            statusCode = 400
+            message = MESSAGE_ERROR.EMPTY_BODY
+        }
+    }
+    else{
+        statusCode = 415
+        message = MESSAGE_ERROR.CONTENT_TYPE
+    }
+    response.status(statusCode)
+    response.json(message)
+})
+
 
 // Ativa o servidor para receber requisições HTTP   
 app.listen(8080, function(){

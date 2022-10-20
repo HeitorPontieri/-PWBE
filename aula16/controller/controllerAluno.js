@@ -1,39 +1,62 @@
 /*
+//////////////// DOCUMENTAÇÃO \\\\\\\\\\\\\\\\\\\\\
+
 Objetivo : Arquivo responsável pela manipulação de recebimento, tratamento e retorno de dados
 entre a API e a model
 Autor : HeitorPontieri
 Data_criação : 06/10/2022
 Versão : 1.0
 */
-const { selectAllAlunos, deleteAluno, updateAluno, insertAluno } = require('../model/DAO/aluno.js')
+
+
+const {MESSAGE_ERROR, MESSAGE_SUCESS} = require('../modulo/config.js')   
 
 // Função para gerar um novo aluno
 const novoAluno = async function (aluno) {
 
     // Validação de campos obrigatórios 
     if (aluno.nome == '' ||aluno.nome == undefined ||aluno.foto == undefined || aluno.foto == '' || aluno.rg == ''||aluno.rg == undefined ||  aluno.cpf == '' || aluno.cpf == undefined || aluno.email == ''|| aluno.email == undefined || aluno.data_nascimento == ''|| aluno.data_nascimento == undefined ) {
-        return false
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
     }
     // Validação para verificar email válido
     else if (!aluno.email.includes('@')) {
-        return false
+        return{status : 400, message :MESSAGE_ERROR.INVALID_EMAIL} 
     }
     else {
         // Chama a função para inserir um novo aluno
-        const novoAluno = insertAluno
-        const result = novoAluno(aluno)
+        const novoAluno = require('../model/DAO/aluno.js')
+        const result = await novoAluno.insertAluno(aluno)
 
         if (result) {
-            return true
+            return {status : 201 , message: MESSAGE_SUCESS.INSERT_ITEM}
         }
         else {
-            return false
+            return {status : 500, message :MESSAGE_ERROR.INTERNAL_ERROR_DB} 
         }
     }
 }
 // Função para atualizar um registro
 const atualizarAluno = async function (aluno) {
+    // Validação de campos obrigatórios 
+    if (aluno.nome == '' ||aluno.nome == undefined ||aluno.foto == undefined || aluno.foto == '' || aluno.rg == ''||aluno.rg == undefined ||  aluno.cpf == '' || aluno.cpf == undefined || aluno.email == ''|| aluno.email == undefined || aluno.data_nascimento == ''|| aluno.data_nascimento == undefined ) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
+    }
+    // Validação para verificar email válido
+    else if (!aluno.email.includes('@')) {
+        return{status : 400, message :MESSAGE_ERROR.INVALID_EMAIL} 
+    }
+    else {
+        // Chama a função para inserir um novo aluno
+        const atualizarAluno = require('../model/DAO/aluno.js')
+        const result = await atualizarAluno.updateAluno(aluno)
 
+        if (result) {
+            return {status : 201 , message: MESSAGE_SUCESS.INSERT_ITEM}
+        }
+        else {
+            return {status : 500, message :MESSAGE_ERROR.INTERNAL_ERROR_DB} 
+        }
+    }
 }
 
 // Função para excluir um registro
@@ -45,10 +68,11 @@ const excluirAluno = async function (id) {
 const listarAlunos = async function () {
     let dadosAlunosJSON = {}
 
-    const dadosAlunos = await selectAllAlunos()
+    const result = require('../model/DAO/aluno.js')
+    const dadosAlunos = await result.selectAllAlunos()
 
     if (dadosAlunos) {
-        // Conversao do tipo de dados  BigInt para int 
+        // Conversao do tipo de dados BigInt para int 
         dadosAlunos.forEach(element => {
             element.id = Number(element.id)
         })
