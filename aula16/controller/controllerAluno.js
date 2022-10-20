@@ -46,12 +46,12 @@ const atualizarAluno = async function (aluno) {
         return{status : 400, message :MESSAGE_ERROR.INVALID_EMAIL} 
     }
     else {
-        // Chama a função para inserir um novo aluno
+        // Chama a função para atualizar um novo aluno
         const atualizarAluno = require('../model/DAO/aluno.js')
         const result = await atualizarAluno.updateAluno(aluno)
 
         if (result) {
-            return {status : 201 , message: MESSAGE_SUCESS.INSERT_ITEM}
+            return {status : 200 , message: MESSAGE_SUCESS.INSERT_ITEM}
         }
         else {
             return {status : 500, message :MESSAGE_ERROR.INTERNAL_ERROR_DB} 
