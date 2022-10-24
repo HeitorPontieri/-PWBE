@@ -214,7 +214,7 @@ app.get('/aluno/:id', cors(), async function (request, response) {
         const controllerAluno = require('./controller/controllerAluno.js')
 
         // Retorna todos os alunos existentes no Banco de Dados
-        const dadosAlunos = await controllerAluno.listarAlunos()
+        const dadosAlunos = await controllerAluno.listarAlunosById(id)
 
         if (dadosAlunos) {
             // Status 200
@@ -223,7 +223,7 @@ app.get('/aluno/:id', cors(), async function (request, response) {
         }
         else {
             // Status 400
-            statusCode = 400
+            statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
         }
     }

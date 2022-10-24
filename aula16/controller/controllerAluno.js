@@ -107,8 +107,27 @@ const listarAlunos = async function () {
 
 };
 
-const listarAlunosById = async function(id){
-    
+// Função para retornar um registro  baseado no ID
+const listarAlunosById = async function (id) {
+    let dadosAlunoJSON = {}
+
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    }
+    else {
+        const result = require('../model/DAO/aluno.js')
+        const dadosAluno = await result.selectAlunosById(id)
+
+        if (dadosAluno) {
+            dadosAlunoJSON.aluno = dadosAluno
+            return dadosAlunoJSON
+        }
+        else {
+            return false
+        }
+    }
+
+
 }
 
 module.exports = {

@@ -104,22 +104,42 @@ const selectAllAlunos = async function () {
     // Instância da classe PrismaClient
     const prisma = new PrismaClient()
 
-    // Criamos um objeto do tipo RecordSet(rsAlunos) para receber os dados do BD
-    // atraves do script SQL(select)
-    // $queryRaw nos permite escrever um script direto para o BD
-    // desc = descendente , ou seja decrescente do maior para o menor
-    // asc = ascendente, ou seja crescente do menor para o maior 
-    const rsAlunos = await prisma.$queryRaw `select cast(id as float) as id, nome,foto,sexo,rg,cpf,email,telefone,data_nascimento from tbl_aluno order by id desc`
+    const rsAluno = await prisma.$queryRaw `select cast(id as float) as id, nome,foto,sexo,rg,cpf,email,telefone,data_nascimento from tbl_aluno order by id desc`
 
-    if (rsAlunos.length > 0) {
-        return rsAlunos
+    if (rsAluno.length > 0) {
+        return rsAluno
     }
     else {
         return false
     }
 }
+// Função para retornar apenas o registro baseado no ID
+const selectAlunosById = async function (id){
+     // Import da classe prismaClient, que é responsável pelas interações com BD
+     const { PrismaClient } = require('@prisma/client')
 
-const selectAlunosById = async function (id){}
+     // Instância da classe PrismaClient
+     const prisma = new PrismaClient()
+
+     let sql = `select cast(id as float) as id, 
+                                            nome,
+                                            foto,
+                                            sexo,
+                                            rg,
+                                            cpf,
+                                            email,
+                                            telefone,
+                                            data_nascimento from tbl_aluno where id = ${id}`
+
+     const rsAlunos = await prisma.$queryRawUnsafe (sql)
+ 
+     if (rsAlunos.length > 0) {
+         return rsAlunos
+     }
+     else {
+         return false
+     }
+}
 
 module.exports = {
     selectAllAlunos,
