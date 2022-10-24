@@ -9,18 +9,18 @@ Versão : 1.0
 */
 
 
-const {MESSAGE_ERROR, MESSAGE_SUCESS} = require('../modulo/config.js')   
+const { MESSAGE_ERROR, MESSAGE_SUCESS } = require('../modulo/config.js')
 
 // Função para gerar um novo aluno
 const novoAluno = async function (aluno) {
 
     // Validação de campos obrigatórios 
-    if (aluno.nome == '' ||aluno.nome == undefined ||aluno.foto == undefined || aluno.foto == '' || aluno.rg == ''||aluno.rg == undefined ||  aluno.cpf == '' || aluno.cpf == undefined || aluno.email == ''|| aluno.email == undefined || aluno.data_nascimento == ''|| aluno.data_nascimento == undefined ) {
-        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
+    if (aluno.nome == '' || aluno.nome == undefined || aluno.foto == undefined || aluno.foto == '' || aluno.rg == '' || aluno.rg == undefined || aluno.cpf == '' || aluno.cpf == undefined || aluno.email == '' || aluno.email == undefined || aluno.data_nascimento == '' || aluno.data_nascimento == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     }
     // Validação para verificar email válido
     else if (!aluno.email.includes('@')) {
-        return{status : 400, message :MESSAGE_ERROR.INVALID_EMAIL} 
+        return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
     }
     else {
         // Chama a função para inserir um novo aluno
@@ -28,28 +28,28 @@ const novoAluno = async function (aluno) {
         const result = await novoAluno.insertAluno(aluno)
 
         if (result) {
-            return {status : 201 , message: MESSAGE_SUCESS.INSERT_ITEM}
+            return { status: 201, message: MESSAGE_SUCESS.INSERT_ITEM }
         }
         else {
-            return {status : 500, message :MESSAGE_ERROR.INTERNAL_ERROR_DB} 
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
     }
 }
 // Função para atualizar um registro
 const atualizarAluno = async function (aluno) {
-    
+
     // Validação para o ID como campo obrigatório
-    if(aluno.id == '' || aluno.id == undefined){
-        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+    if (aluno.id == '' || aluno.id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     }
-    
+
     // Validação de campos obrigatórios 
-    if (aluno.nome == '' ||aluno.nome == undefined ||aluno.foto == undefined || aluno.foto == '' || aluno.rg == ''||aluno.rg == undefined ||  aluno.cpf == '' || aluno.cpf == undefined || aluno.email == ''|| aluno.email == undefined || aluno.data_nascimento == ''|| aluno.data_nascimento == undefined ) {
-        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
+    if (aluno.nome == '' || aluno.nome == undefined || aluno.foto == undefined || aluno.foto == '' || aluno.rg == '' || aluno.rg == undefined || aluno.cpf == '' || aluno.cpf == undefined || aluno.email == '' || aluno.email == undefined || aluno.data_nascimento == '' || aluno.data_nascimento == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     }
     // Validação para verificar email válido
     else if (!aluno.email.includes('@')) {
-        return{status : 400, message :MESSAGE_ERROR.INVALID_EMAIL} 
+        return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
     }
     else {
         // Chama a função para atualizar um aluno
@@ -57,17 +57,32 @@ const atualizarAluno = async function (aluno) {
         const result = await atualizarAluno.updateAluno(aluno)
 
         if (result) {
-            return {status : 200 , message: MESSAGE_SUCESS.INSERT_ITEM}
+            return { status: 200, message: MESSAGE_SUCESS.UPDATE_ITEM }
         }
         else {
-            return {status : 500, message :MESSAGE_ERROR.INTERNAL_ERROR_DB} 
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
     }
 }
 
 // Função para excluir um registro
 const excluirAluno = async function (id) {
+    // Validação para o ID como campo obrigatório
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    }
+    else {
+        // Chama a função para atualizar um aluno
+        const deletarAluno = require('../model/DAO/aluno.js')
+        const result = await deletarAluno.deleteAluno(id)
 
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCESS.DELETE_ITEM }
+        }
+        else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
 }
 
 // Função para retornar todos os registros
@@ -92,9 +107,14 @@ const listarAlunos = async function () {
 
 };
 
+const listarAlunosById = async function(id){
+    
+}
+
 module.exports = {
     listarAlunos,
     novoAluno,
     excluirAluno,
-    atualizarAluno
+    atualizarAluno,
+    listarAlunosById
 }

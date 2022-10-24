@@ -69,7 +69,32 @@ const updateAluno = async function (aluno) {
 }
 // Função para apagar um registro no BD
 const deleteAluno = async function (id) {
+    try {
+        // Import da classe prismaClient, que é responsável pelas interações com BD
+        const { PrismaClient } = require('@prisma/client')
 
+        // Instância da classe PrismaClient
+        const prisma = new PrismaClient()
+
+        // Guarda o script SQL em uma variável 
+        let sql = `delete from tbl_aluno where id = '${id}'
+`
+        console.log(sql)
+        // Executa o scipt SQL no banco de dados ($executeRawUnsafe permite encaminhar uma variavel contendo o script)
+        const result = await prisma.$executeRawUnsafe(sql)
+        
+        // Verifica se o script foi executado com sucesso
+        if (result) {
+            return true
+        }
+        else {
+            // Retorna falso pq nao consegue criar 
+            return false
+        }
+    } catch (error) {
+        // Retorna false por algum problema na programação 
+        return false
+    }
 }
 // Função para retornar todos os registros no BD
 const selectAllAlunos = async function () {
@@ -82,7 +107,9 @@ const selectAllAlunos = async function () {
     // Criamos um objeto do tipo RecordSet(rsAlunos) para receber os dados do BD
     // atraves do script SQL(select)
     // $queryRaw nos permite escrever um script direto para o BD
-    const rsAlunos = await prisma.$queryRaw`select cast(id as float) as id, nome,foto,sexo,rg,cpf,email,telefone,data_nascimento from tbl_aluno order by id desc`
+    // desc = descendente , ou seja decrescente do maior para o menor
+    // asc = ascendente, ou seja crescente do menor para o maior 
+    const rsAlunos = await prisma.$queryRaw `select cast(id as float) as id, nome,foto,sexo,rg,cpf,email,telefone,data_nascimento from tbl_aluno order by id desc`
 
     if (rsAlunos.length > 0) {
         return rsAlunos
@@ -92,9 +119,12 @@ const selectAllAlunos = async function () {
     }
 }
 
+const selectAlunosById = async function (id){}
+
 module.exports = {
     selectAllAlunos,
     deleteAluno,
     updateAluno,
-    insertAluno
+    insertAluno,
+    selectAlunosById
 }
