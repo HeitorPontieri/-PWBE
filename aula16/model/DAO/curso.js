@@ -62,7 +62,7 @@ const deleteCurso = async function (id) {
         const prisma = new PrismaClient()
 
         let sql = `delete from tbl_curso where id = '${id}' `
-        console.log(sql)
+   
         
         let result = await prisma.$queryRawUnsafe(sql)
 
@@ -106,8 +106,7 @@ const selectCursoById = async function (id) {
     nome, carga_horaria, icone, sigla from tbl_curso where id = ${id}`
 
     const rsCursos = await prisma.$queryRawUnsafe(sql)
-    console.log(rsCursos)
-    
+ 
     if (rsCursos.length > 0) {
         return rsCursos
     }

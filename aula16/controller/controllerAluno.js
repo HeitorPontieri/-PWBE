@@ -23,11 +23,24 @@ const novoAluno = async function (aluno) {
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
     }
     else {
+
         // Chama a função para inserir um novo aluno
         const novoAluno = require('../model/DAO/aluno.js')
-        const result = await novoAluno.insertAluno(aluno)
+
+        const resultNovoAluno = await novoAluno.insertAluno(aluno)
+
+        // Verifica se os dados do novo aluno foi inserido no BD
+        if (resultNovoAluno) {
+            // Chamaa a função que verifica qual foi o ID gerado para o novo aluno
+            let IdNovoAluno = await novoAluno.selectLastID
+
+            if (IdNovoAluno > 0) {
+
+            }
+        }
 
         if (result) {
+            const lastId = require
             return { status: 201, message: MESSAGE_SUCESS.INSERT_ITEM }
         }
         else {
@@ -89,8 +102,8 @@ const excluirAluno = async function (id) {
                 return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
             }
         }
-        else{
-            return {status : 404, message : MESSAGE_ERROR.NOT_FOUND_DB}
+        else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
     }
 }
@@ -137,6 +150,7 @@ const listarAlunosById = async function (id) {
         }
     }
 }
+
 
 module.exports = {
     listarAlunos,
