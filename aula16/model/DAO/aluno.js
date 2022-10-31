@@ -48,8 +48,8 @@ const updateAluno = async function (aluno) {
 
         // Guarda o script SQL em uma variável 
         let sql = `update tbl_aluno set nome ='${aluno.nome}',foto ='${aluno.foto}',rg ='${aluno.rg}',cpf ='${aluno.cpf}',email ='${aluno.email}',data_nascimento ='${aluno.data_nascimento}',telefone ='${aluno.telefone}',sexo ='${aluno.sexo}' where id = '${aluno.id}'
-`
 
+`
         // Executa o scipt SQL no banco de dados ($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe(sql)
         
@@ -77,9 +77,8 @@ const deleteAluno = async function (id) {
         const prisma = new PrismaClient()
 
         // Guarda o script SQL em uma variável 
-        let sql = `delete from tbl_aluno where id = '${id}'
-`
-        console.log(sql)
+        let sql = `delete from tbl_aluno where id = '${id}' `
+        
         // Executa o scipt SQL no banco de dados ($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe(sql)
         

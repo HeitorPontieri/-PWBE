@@ -7,6 +7,9 @@ Autor : HeitorPontieri
 Data_criação : 10/10/2022
 Versão : 1.0
 
+Versao 2.0 
+    - Novas implementações
+
 ////////////////// ANOTAÇÕES \\\\\\\\\\\\\\\\\\\\
 
 npm install express --save
@@ -41,6 +44,8 @@ const { json } = require('body-parser')
 
 // Arquivo de mensagens padronizadas 
 const { MESSAGE_ERROR, MESSAGE_SUCESS } = require('./modulo/config.js')
+const controllerCurso = require('./controller/controllerCurso')
+const { response } = require('express')
 
 const app = express()
 
@@ -59,7 +64,7 @@ const jsonParser = bodyParser.json()
 // Data : 10/10/22 \\
 
 // EndPoint para listar todos os alunos
-app.get('/alunos', cors(), async function (request, response) {
+app.get('/v1/alunos', cors(), async function (request, response) {
     let statusCode
     let message
 
@@ -85,7 +90,7 @@ app.get('/alunos', cors(), async function (request, response) {
 })
 
 // EndPoint para receber um novo aluno
-app.post('/aluno', cors(), jsonParser, async function (request, response) {
+app.post('/v1/aluno', cors(), jsonParser, async function (request, response) {
     let statusCode
     let message
 
@@ -123,7 +128,7 @@ app.post('/aluno', cors(), jsonParser, async function (request, response) {
 })
 
 // EndPoint para atualizar um aluno existente
-app.put('/aluno/:id', cors(), jsonParser, async function (request, response) {
+app.put('/v1/aluno/:id', cors(), jsonParser, async function (request, response) {
 
     let statusCode
     let message
@@ -176,7 +181,7 @@ app.put('/aluno/:id', cors(), jsonParser, async function (request, response) {
 })
 
 // EndPoint para apagar um aluno existente
-app.delete('/aluno/:id', cors(), jsonParser, async function (request, response) {
+app.delete('/v1/aluno/:id', cors(), jsonParser, async function (request, response) {
     let statusCode
     let message
 
@@ -202,10 +207,10 @@ app.delete('/aluno/:id', cors(), jsonParser, async function (request, response) 
 })
 
 // EndPoint para buscar um aluno pelo id
-app.get('/aluno/:id', cors(), async function (request, response) {
+app.get('/v1/aluno/:id', cors(), async function (request, response) {
     let statusCode
     let message
-    let  id = request.params.id
+    let id = request.params.id
 
 
     //  Validação do ID na requisição
@@ -227,9 +232,9 @@ app.get('/aluno/:id', cors(), async function (request, response) {
             message = MESSAGE_ERROR.NOT_FOUND_DB
         }
     }
-    else{
-        statusCode : 400
-        message : MESSAGE_ERROR.REQUIRED_ID
+    else {
+        statusCode: 400
+        message: MESSAGE_ERROR.REQUIRED_ID
     }
 
 
@@ -239,8 +244,159 @@ app.get('/aluno/:id', cors(), async function (request, response) {
 })
 
 
+/*
+
+    CRUD DE CURSO
+    Objetivo : Adicionar, exluir ou modificar os registros na tabela de cursos
+    Autor : HeitorPontieri
+    data : 31/10/22
+    versão : 1.0
+
+*/
 
 
+// EndPoint para buscar todos os cursos
+app.get('/v1/cursos', cors(), async function (request, response) {
+    let statusCode
+    let message
+
+    const dadosCursos = await controllerCurso.listarCursos()
+
+    if (dadosCursos) {
+        statusCode = 200
+        message = dadosCursos
+    }
+    else {
+        statusCode = 404
+        message = MESSAGE_ERROR.NOT_FOUND_DB
+    }
+
+    response.status(statusCode)
+    response.json(message)
+})
+// EndPoint para listar um curso pelo ID
+app.get('/v1/curso/:id', cors(), async function (request, response) {
+    let statusCode
+    let message
+    let id = request.params.id
+
+
+    //  Validação do ID na requisição
+    if (id != '' && id != undefined) {
+        const dadosCurso = await controllerCurso.listarCursoById(id)
+        if (dadosCurso) {
+            statusCode = 200
+            message = dadosCurso
+        }
+        else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+    }
+    else {
+        statusCode: 400
+        message: MESSAGE_ERROR.REQUIRED_ID
+    }
+    response.status(statusCode)
+    response.json(message)
+})
+
+// EndPoint para adicionar um novo curso
+app.post('/v1/curso', cors(), jsonParser, async function (request, response) {
+    let statusCode
+    let message
+    let headerContentType
+
+    headerContentType = request.headers['content-type']
+
+    if (headerContentType == 'application/json') {
+        let dadosBody = request.body
+        if (JSON.stringify(dadosBody) != '{}') {
+            const novoCurso = await controllerCurso.novoCurso(dadosBody)
+            statusCode = novoCurso.status
+            message = novoCurso.message
+        }
+        else {
+            statusCode = 400
+            message = MESSAGE_ERROR.EMPTY_BODY
+        }
+    }
+    else {
+        statusCode = 415
+        message = MESSAGE_ERROR.CONTENT_TYPE
+    }
+
+    response.status(statusCode)
+    response.json(message)
+})
+app.put('/v1/curso/:id', cors(), jsonParser, async function (request, response) {
+
+    let statusCode
+    let message
+
+    // Content-Type é a variável que traz o formato de dados da requisição
+    let headerContentType
+
+    // Recebe o tipo de content type que foi enviado no header da requisição 
+    headerContentType = request.headers['content-type']
+
+    // Valida o tipo do content type é do tipo application/json
+    if (headerContentType == 'application/json') {
+        // Recebe do corpo da mensagem o conteúdo,
+        let dadosBody = request.body
+        // Realiza um processo de conversão de dados para conseguir comparar o json vazio
+        if (JSON.stringify(dadosBody) != '{}') {
+
+            //Recebe o id enviado por parametro na requisição
+            let id = request.params.id
+            //  Validação do ID na requisição
+            if (id != '' && id != undefined) {
+                // Adiciona o id no JSON que chegou do corpo da requisição
+                dadosBody.id = id
+                // Chama a funcao novoCurso da controller e encaminha o id
+                const atualizarCurso = await controllerCurso.atualizarCurso(dadosBody)
+                statusCode = atualizarCurso.status
+                message = atualizarCurso.message
+            }
+            else {
+                statusCode = 400
+                message = MESSAGE_ERROR.REQUIRED_ID
+            }
+        }
+        else {
+            statusCode = 400
+            message = MESSAGE_ERROR.EMPTY_BODY
+        }
+    }
+    else {
+        statusCode = 415
+        message = MESSAGE_ERROR.CONTENT_TYPE
+    }
+    response.status(statusCode)
+    response.json(message)
+})
+// EndPoint para apagar um curso
+app.delete('/v1/curso/:id', cors(), jsonParser, async function (request, response) {
+
+    let statusCode
+    let message
+
+    let id = request.params.id
+   
+
+    if (id != '' || id != undefined) {
+        const curso = await controllerCurso.excluirCurso(id)
+        
+        statusCode = curso.status
+        message = curso.message
+    }
+    else {
+        statusCode = 400
+        message = MESSAGE_ERROR.REQUIRED_ID
+    }
+    response.status(statusCode)
+    response.json(message)
+})
 
 
 // Ativa o servidor para receber requisições HTTP   

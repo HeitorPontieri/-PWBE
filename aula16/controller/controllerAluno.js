@@ -72,15 +72,25 @@ const excluirAluno = async function (id) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     }
     else {
-        // Chama a função para atualizar um aluno
-        const deletarAluno = require('../model/DAO/aluno.js')
-        const result = await deletarAluno.deleteAluno(id)
 
-        if (result) {
-            return { status: 200, message: MESSAGE_SUCESS.DELETE_ITEM }
+        // Validdação para verificar se o ID existe no BD
+        const buscarAluno = await listarAlunosById(id)
+
+        // Valida se foi encontrado um registro válido
+        if (buscarAluno) {
+            // Chama a função para apagar um aluno
+            const deletarAluno = require('../model/DAO/aluno.js')
+            const result = await deletarAluno.deleteAluno(id)
+
+            if (result) {
+                return { status: 200, message: MESSAGE_SUCESS.DELETE_ITEM }
+            }
+            else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
         }
-        else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        else{
+            return {status : 404, message : MESSAGE_ERROR.NOT_FOUND_DB}
         }
     }
 }
@@ -126,8 +136,6 @@ const listarAlunosById = async function (id) {
             return false
         }
     }
-
-
 }
 
 module.exports = {
