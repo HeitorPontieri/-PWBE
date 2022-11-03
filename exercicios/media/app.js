@@ -66,14 +66,10 @@ entradaDados.question('Digite o nome do aluno(a)\n', function (alunoNome) {
                                             exit()
                                         }
 
-
                                         let notaEx = ''
                                         let media = calcMedia(nota1, nota2, nota3, nota4)
                                         let mediaEx = exame(notaEx)
                                         
-
-
-
                                         result(media)
 
 

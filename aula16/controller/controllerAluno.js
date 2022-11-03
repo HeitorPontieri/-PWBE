@@ -11,6 +11,7 @@ Versão : 1.0
 
 const { MESSAGE_ERROR, MESSAGE_SUCESS } = require('../modulo/config.js')
 
+
 // Função para gerar um novo aluno
 const novoAluno = async function (aluno) {
 
@@ -27,22 +28,55 @@ const novoAluno = async function (aluno) {
         // Chama a função para inserir um novo aluno
         const novoAluno = require('../model/DAO/aluno.js')
 
-        const resultNovoAluno = await novoAluno.insertAluno(aluno)
+        // Import da model alunoCurso(tabela de relação entre aluno e curso)
+        const novoAlunoCurso = require('../model/DAO/aluno_curso.js')
 
+        const resultNovoAluno = await novoAluno.insertAluno(aluno)
+      
         // Verifica se os dados do novo aluno foi inserido no BD
         if (resultNovoAluno) {
             // Chamaa a função que verifica qual foi o ID gerado para o novo aluno
-            let IdNovoAluno = await novoAluno.selectLastID
+            let IdNovoAluno = await novoAluno.selectLastID()
+            
 
             if (IdNovoAluno > 0) {
-
+                // Cria um objeto JSON
+                let alunoCurso = {}
+                // Retorna o ano corrente 
+                let ano_matricula = new Date().getFullYear()
+                // Cria a matrícula do aluno (id_aluno+ id_curso + ano corrente)
+                let numero_matricula = `${IdNovoAluno}${aluno.curso[0].id_curso}${ano_matricula}`
+                // Cria o objeto JSON com todas as chaves e valores
+                alunoCurso.id_aluno = IdNovoAluno
+                alunoCurso.id_curso = aluno.curso[0].id_curso
+                alunoCurso.matricula = numero_matricula
+            
+                if(alunoCurso.id_aluno){
+                    alunoCurso.status_aluno = 'Cursando'
+                }
+                else{
+                    alunoCurso.status_alunos = 'Inexistente'
+                }
+                
+                
+                // Chama a função para inserir na tabela alunoCurso
+                const resultNovoAlunoCurso = await novoAlunoCurso.insertAlunoCursoID(alunoCurso)
+             
+                if (resultNovoAlunoCurso) {
+                    return { status: 201, message: MESSAGE_SUCESS.INSERT_ITEM }
+                }
+                else {
+                    // Caso aconteça neste processo, obrigatoriamente deverá ser excluído do BD o registro do aluno
+                    await excluirAluno(alunoCurso.id_aluno)
+                    return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+                }
+            }
+            else{
+               await excluirAluno(IdNovoAluno)
+               return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
             }
         }
 
-        if (result) {
-            const lastId = require
-            return { status: 201, message: MESSAGE_SUCESS.INSERT_ITEM }
-        }
         else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
@@ -113,14 +147,19 @@ const listarAlunos = async function () {
     let dadosAlunosJSON = {}
 
     const result = require('../model/DAO/aluno.js')
+   
     const dadosAlunos = await result.selectAllAlunos()
 
+
     if (dadosAlunos) {
-        // Conversao do tipo de dados BigInt para int 
-        dadosAlunos.forEach(element => {
-            element.id = Number(element.id)
-        })
+         // Conversao do tipo de dados BigInt para int 
+        // dadosAlunos.forEach(element => {
+        //     element.id = Number(element.id)
+        // })
         // dadosAlunos.reverse()
+
+        AlunoCurso
+
         dadosAlunosJSON.alunos = dadosAlunos
         return dadosAlunosJSON
     }
@@ -134,17 +173,32 @@ const listarAlunos = async function () {
 const listarAlunosById = async function (id) {
     let dadosAlunoJSON = {}
 
+
     if (id == '' || id == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     }
     else {
         const result = require('../model/DAO/aluno.js')
+        const select = require('../model/DAO/aluno_curso.js')
         const dadosAluno = await result.selectAlunosById(id)
-
+       
         if (dadosAluno) {
-            dadosAlunoJSON.aluno = dadosAluno
-            return dadosAlunoJSON
+            const dadosAlunoCurso = await select.selectAlunoCurso(id)
+            console.log(dadosAlunoCurso);
+            if(dadosAluno){
+                dadosAluno[0].curso = dadosAlunoCurso
+                dadosAlunoJSON.aluno = dadosAluno
+                return dadosAlunoJSON
+                
+            }
+            else{
+                dadosAlunoJSON = dadosAluno
+                return dadosAlunoJSON
+            }
+            
+        
         }
+       
         else {
             return false
         }

@@ -7,6 +7,8 @@ Data_criação : 06/10/2022
 Versão : 1.0
 */
 
+const { sqltag } = require('@prisma/client/runtime')
+
 // Função para inserir um novo registro no banco de dados
 const insertAluno = async function (aluno) {
     try {
@@ -19,7 +21,7 @@ const insertAluno = async function (aluno) {
         // Guarda o script SQL em uma variável 
         let sql = `insert into tbl_aluno(nome,foto,rg,cpf,email,data_nascimento,telefone, sexo)
                 values('${aluno.nome}','${aluno.foto}','${aluno.rg}','${aluno.cpf}','${aluno.email}','${aluno.data_nascimento}','${aluno.telefone}','${aluno.sexo}')`
-
+        
         // Executa o scipt SQL no banco de dados ($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -52,7 +54,7 @@ const updateAluno = async function (aluno) {
 `
         // Executa o scipt SQL no banco de dados ($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe(sql)
-        
+
         // Verifica se o script foi executado com sucesso
         if (result) {
             return true
@@ -78,10 +80,10 @@ const deleteAluno = async function (id) {
 
         // Guarda o script SQL em uma variável 
         let sql = `delete from tbl_aluno where id = '${id}' `
-        
+
         // Executa o scipt SQL no banco de dados ($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe(sql)
-        
+
         // Verifica se o script foi executado com sucesso
         if (result) {
             return true
@@ -103,7 +105,7 @@ const selectAllAlunos = async function () {
     // Instância da classe PrismaClient
     const prisma = new PrismaClient()
 
-    const rsAluno = await prisma.$queryRaw `select cast(id as float) as id, nome,foto,sexo,rg,cpf,email,telefone,data_nascimento from tbl_aluno order by id desc`
+    const rsAluno = await prisma.$queryRaw`select cast(id as float) as id, nome,foto,sexo,rg,cpf,email,telefone,data_nascimento from tbl_aluno order by id desc`
 
     if (rsAluno.length > 0) {
         return rsAluno
@@ -112,15 +114,16 @@ const selectAllAlunos = async function () {
         return false
     }
 }
+
 // Função para retornar apenas o registro baseado no ID
-const selectAlunosById = async function (id){
-     // Import da classe prismaClient, que é responsável pelas interações com BD
-     const { PrismaClient } = require('@prisma/client')
+const selectAlunosById = async function (id) {
+    // Import da classe prismaClient, que é responsável pelas interações com BD
+    const { PrismaClient } = require('@prisma/client')
 
-     // Instância da classe PrismaClient
-     const prisma = new PrismaClient()
+    // Instância da classe PrismaClient
+    const prisma = new PrismaClient()
 
-     let sql = `select cast(id as float) as id, 
+    let sql = `select cast(id as float) as id, 
                                             nome,
                                             foto,
                                             sexo,
@@ -130,40 +133,41 @@ const selectAlunosById = async function (id){
                                             telefone,
                                             data_nascimento from tbl_aluno where id = ${id}`
 
-     const rsAlunos = await prisma.$queryRawUnsafe (sql)
- 
-     if (rsAlunos.length > 0) {
-         return rsAlunos
-     }
-     else {
-         return false
-     }
+
+    const rsAlunos = await prisma.$queryRawUnsafe(sql)
+
+    if (rsAlunos.length > 0) {
+        return rsAlunos
+    }
+    else {
+        return false
+    }
 }
 
-const selectLastID = async function(){
+const selectLastID = async function () {
 
-   
     const { PrismaClient } = require('@prisma/client')
 
     const prisma = new PrismaClient()
 
     // Script para buscar o ultimo ID gerado no BD
-    let sql =  `select cast (id as float) as id from tbl_aluno order by id desc limit 1;`
+    let sql = `select cast(id as float) as id from tbl_aluno order by id desc limit 1;`
+  
 
-    const id  = await prisma.$queryRawUnsafe (sql)
- 
-     if (id.length > 0) {
-         return id
-     }
-     else {
-         return false
-     }
+    const rsAluno = await prisma.$queryRawUnsafe(sql)
+
+    if (rsAluno) {
+        return rsAluno[0].id
+    }
+    else {
+        return false
+    }
 }
 
 
 module.exports = {
     updateAluno,
-    insertAluno,   
+    insertAluno,
     deleteAluno,
     selectAllAlunos,
     selectAlunosById,
