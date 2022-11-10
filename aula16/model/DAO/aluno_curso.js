@@ -55,11 +55,13 @@ const selectAlunoCurso = async function (id_aluno){
                         inner join tbl_curso
                              on tbl_curso.id = tbl_aluno_curso.id_curso
                         
-                        where tbl_aluno.id = ${id_aluno};`
+                         where tbl_aluno.id = ${id_aluno};`
 
-        const rsAlunoCurso = prisma.$executeRawUnsafe(sql)
+
+        const rsAlunoCurso = await prisma.$queryRawUnsafe(sql)
+        
+        
        
-    
         if(rsAlunoCurso){
             return rsAlunoCurso
         }

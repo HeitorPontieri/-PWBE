@@ -152,13 +152,12 @@ const listarAlunos = async function () {
 
 
     if (dadosAlunos) {
-         // Conversao do tipo de dados BigInt para int 
+        
+        // Conversao do tipo de dados BigInt para int 
         // dadosAlunos.forEach(element => {
         //     element.id = Number(element.id)
         // })
         // dadosAlunos.reverse()
-
-        AlunoCurso
 
         dadosAlunosJSON.alunos = dadosAlunos
         return dadosAlunosJSON
@@ -181,7 +180,7 @@ const listarAlunosById = async function (id) {
         const result = require('../model/DAO/aluno.js')
         const select = require('../model/DAO/aluno_curso.js')
         const dadosAluno = await result.selectAlunosById(id)
-       
+      
         if (dadosAluno) {
             const dadosAlunoCurso = await select.selectAlunoCurso(id)
             console.log(dadosAlunoCurso);

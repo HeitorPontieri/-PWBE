@@ -220,7 +220,6 @@ app.get('/v1/aluno/:id', cors(), async function (request, response) {
 
         // Retorna todos os alunos existentes no Banco de Dados
         const dadosAlunos = await controllerAluno.listarAlunosById(id)
-
         if (dadosAlunos) {
             // Status 200
             statusCode = 200
@@ -233,8 +232,8 @@ app.get('/v1/aluno/:id', cors(), async function (request, response) {
         }
     }
     else {
-        statusCode: 400
-        message: MESSAGE_ERROR.REQUIRED_ID
+        statusCode = 400
+        message = MESSAGE_ERROR.REQUIRED_ID
     }
 
 
