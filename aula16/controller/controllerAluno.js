@@ -145,21 +145,32 @@ const excluirAluno = async function (id) {
 // Função para retornar todos os registros
 const listarAlunos = async function () {
     let dadosAlunosJSON = {}
-
-    const result = require('../model/DAO/aluno.js')
    
+
+    
+    const result = require('../model/DAO/aluno.js')
+    const select = require('../model/DAO/aluno_curso.js')
+   
+    // Busca todos os alunos
     const dadosAlunos = await result.selectAllAlunos()
 
 
     if (dadosAlunos) {
         
-        // Conversao do tipo de dados BigInt para int 
-        // dadosAlunos.forEach(element => {
-        //     element.id = Number(element.id)
-        // })
-        // dadosAlunos.reverse()
+        const alunosCursoArray = dadosAlunos.map(async item => {
+            // Busca os dados referentes ao curso do aluno
+            const dadosAlunoCurso = await select.selectAlunoCurso(item.id)  
+            
+            // acrescenta uma chave curso e coloca os dados do curso do aluno
+            item.curso = dadosAlunoCurso
 
-        dadosAlunosJSON.alunos = dadosAlunos
+            // Adiciona na array cada elemento contendendo dados dos alunos e seus cursos
+           // alunosCursoArray.push(item)
+            return item
+        });
+        
+
+        dadosAlunosJSON.alunos = await Promise.all(alunosCursoArray)
         return dadosAlunosJSON
     }
     else {
@@ -177,13 +188,16 @@ const listarAlunosById = async function (id) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     }
     else {
+        // Import da model de aluno e aluno_curso
         const result = require('../model/DAO/aluno.js')
-        const select = require('../model/DAO/aluno_curso.js')
+
         const dadosAluno = await result.selectAlunosById(id)
       
+
+        const select = require('../model/DAO/aluno_curso.js')
+
         if (dadosAluno) {
             const dadosAlunoCurso = await select.selectAlunoCurso(id)
-            console.log(dadosAlunoCurso);
             if(dadosAluno){
                 dadosAluno[0].curso = dadosAlunoCurso
                 dadosAlunoJSON.aluno = dadosAluno
