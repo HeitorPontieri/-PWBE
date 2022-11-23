@@ -20,7 +20,7 @@ npm install express --save
     Para instalar o prisma, devemos rodar os seguintes comandos
          npm install prisma --save
          npx prisma
-         npx init prisma
+         npx prisma init
          npm install @prisma/client
         
         
